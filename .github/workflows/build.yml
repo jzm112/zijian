@@ -33,10 +33,28 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
 
-    - name: 载入配置文件 (.config)
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 检查并载入配置文件 (.config)
       run: |
-        [ -e .config ] && rm .config
-        cp $GITHUB_WORKSPACE/.config openwrt/.config
+        echo "=== 当前根目录文件列表 ==="
+        ls -la $GITHUB_WORKSPACE
+        
+        if [ -f "$GITHUB_WORKSPACE/.config" ]; then
+          cp "$GITHUB_WORKSPACE/.config" openwrt/.config
+          echo "✅ 已成功载入 .config 文件"
+        elif [ -f "$GITHUB_WORKSPACE/config" ]; then
+          cp "$GITHUB_WORKSPACE/config" openwrt/.config
+          echo "✅ 已成功载入 config 文件"
+        else
+          echo "❌ 仍未找到配置文件，尝试强制创建基础 .config"
+          echo "CONFIG_TARGET_armsr=y" > openwrt/.config
+          echo "CONFIG_TARGET_armsr_armv8=y" >> openwrt/.config
+        fi
+
         cd openwrt
         make defconfig
 
