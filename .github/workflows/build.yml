@@ -1,12 +1,12 @@
 name: Build ImmortalWrt ARM64
 
 on:
-  workflow_dispatch: # 支持在 GitHub 网页上手动点击按钮触发编译
+  workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      - '.config'   # 只要你修改并提交了 .config 文件，就会自动开始编译
+      - '.config'
 
 jobs:
   build:
@@ -21,7 +21,7 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: |
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq install -y ack antlr3 ascii bash bc binutils bzip2 libbzip2-dev cgi-io coreutils curl device-tree-compiler diffutils docbook-xml docbook-xsl flex gawk gcc gcc-multilib gengetopt gettext git git-core gperf glib2.0-dev groff help2man htop ibverbs-providers iconv info install-info intltool jq lib32gcc-s1 lib32stdc++6 libacl1-dev libarchive-dev libattr1-dev libblkid-dev libboost-all-dev libcap-dev libcap-ng-dev libcurl4-openssl-dev libdrm-dev libelf-dev libglib2.0-dev libgmp-dev libgmpxx4ldbl libip4tc-dev libip6tc-dev libjson-c-dev libltdl-dev libmbedtls-dev libncurses5-dev libncursesw5-dev libnl-3-dev libnl-genl-3-dev libopenssl-dev libpcap-dev libpcre3-dev libpcre2-dev libreadline-dev libsqlite3-dev libssl-dev libstdc++6 libtool libudev-dev libusb-1.0-0-dev libuv1-dev libxml2-utils libz-dev linux-headers-generic lz4 lzma lzma-dev lzop make m4 ncftp ncurses-bin net-tools ninja-build patch perl pkgconf python3 python3-pip python3-ply python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion swig tar texinfo uglifyjs unzip u-boot-tools uuid-dev vim wget xmlto xz-utils zlib1g-dev zstd
+        sudo -E apt-get -qq install -y build-essential clang flex bison cmake git libncurses5-dev libssl-dev python3 python3-pip python3-ply zlib1g-dev unrar p7zip-full subversion gettext libpcap-dev time
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "Asia/Shanghai"
