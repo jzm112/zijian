@@ -13,8 +13,10 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - name: Checkout
+    - name: Checkout 仓库代码
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: 初始化编译环境
       env:
@@ -33,16 +35,8 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
 
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-
     - name: 检查并载入配置文件 (.config)
       run: |
-        # 如果 openwrt 目录不存在则自动创建，防止 cp 拷贝失败
-        mkdir -p openwrt
-        
         if [ -f "$GITHUB_WORKSPACE/.config" ]; then
           cp "$GITHUB_WORKSPACE/.config" openwrt/.config
           echo "✅ 已成功载入 .config 文件"
